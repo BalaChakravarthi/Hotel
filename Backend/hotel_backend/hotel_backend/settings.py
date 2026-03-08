@@ -127,13 +127,22 @@ REST_FRAMEWORK = {
 
 # EMAIL CONFIGURATION USING DJANGO ANYMAIL
 
-EMAIL_BACKEND = "anymail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
 
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+ANYMAIL = {
+    "SENDGRID_API_KEY": os.getenv("SENDGRID_API_KEY"),
+}
 
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = "balachakravarthi05@gmail.com"
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# EMAIL_BACKEND = "anymail.backends.smtp.EmailBackend"
+
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
