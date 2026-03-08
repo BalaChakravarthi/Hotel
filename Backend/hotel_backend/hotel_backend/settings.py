@@ -1,4 +1,4 @@
-"""
+﻿"""
 Django settings for hotel_backend project.
 """
 
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
+    "anymail",
     "accounts",
     "rooms",
     "bookings",
@@ -38,9 +39,9 @@ AUTH_USER_MODEL = "accounts.User"
 
 # MIDDLEWARE
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -123,11 +124,16 @@ REST_FRAMEWORK = {
     )
 }
 
-# EMAIL CONFIGURATION
+
+# EMAIL CONFIGURATION USING DJANGO ANYMAIL
+
 EMAIL_BACKEND = "anymail.backends.smtp.EmailBackend"
+
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "noreply@smtp.gmail.com")
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
