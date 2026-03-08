@@ -134,6 +134,7 @@ ANYMAIL = {
 }
 
 DEFAULT_FROM_EMAIL = "balachakravarthi05@gmail.com"
+
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # EMAIL_BACKEND = "anymail.backends.smtp.EmailBackend"
