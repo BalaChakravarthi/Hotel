@@ -46,7 +46,6 @@ function RoomCard({ room }) {
     const outDate = new Date(form.check_out);
 
     const diff = (outDate - inDate) / (1000 * 60 * 60 * 24);
-
     return diff > 0 ? diff : 0;
   };
 
@@ -74,10 +73,8 @@ function RoomCard({ room }) {
       });
 
       setPaymentData(res.data);
-
       setTimeLeft(120);
       setExpired(false);
-
     } catch (error) {
       alert(error.response?.data?.error || "Booking failed");
     } finally {
@@ -96,16 +93,21 @@ function RoomCard({ room }) {
 
       alert("Payment marked as paid!");
 
-      setShowModal(false);
-      setPaymentData(null);
-      setForm({
-        check_in: "",
-        check_out: "",
-      });
-
+      closeModal();
     } catch {
       alert("Failed to mark as paid");
     }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setPaymentData(null);
+    setForm({
+      check_in: "",
+      check_out: "",
+    });
+    setTimeLeft(120);
+    setExpired(false);
   };
 
   return (
@@ -145,12 +147,12 @@ function RoomCard({ room }) {
 
       {/* MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4 py-6">
 
           <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white w-full max-w-md max-h-[90vh] flex flex-col rounded-2xl shadow-2xl">
 
-            {/* Scrollable Content */}
-            <div className="overflow-y-auto p-6 sm:p-8">
+            {/* Scrollable content */}
+            <div className="overflow-y-auto p-6">
 
               <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center">
                 Select Dates
@@ -158,36 +160,25 @@ function RoomCard({ room }) {
 
               <div className="space-y-4">
 
-                {/* CHECK IN */}
                 <input
                   type="date"
                   min={today}
-                  className="w-full p-3 rounded-lg border border-gray-300
-                  dark:border-gray-600
-                  bg-white dark:bg-gray-700
-                  text-gray-900 dark:text-white
-                  focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   value={form.check_in}
                   onChange={(e) =>
                     setForm({ ...form, check_in: e.target.value })
                   }
                 />
 
-                {/* CHECK OUT */}
                 <input
                   type="date"
                   min={form.check_in || today}
-                  className="w-full p-3 rounded-lg border border-gray-300
-                  dark:border-gray-600
-                  bg-white dark:bg-gray-700
-                  text-gray-900 dark:text-white
-                  focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   value={form.check_out}
                   onChange={(e) =>
                     setForm({ ...form, check_out: e.target.value })
                   }
                 />
-
               </div>
 
               {nights > 0 && (
@@ -199,13 +190,9 @@ function RoomCard({ room }) {
                 </div>
               )}
 
-              {/* BUTTONS */}
               <div className="mt-6 flex gap-3">
                 <button
-                  onClick={() => {
-                    setShowModal(false);
-                    setPaymentData(null);
-                  }}
+                  onClick={closeModal}
                   className="w-full bg-gray-400 text-white py-2 rounded-lg"
                 >
                   Cancel
@@ -256,7 +243,7 @@ function RoomCard({ room }) {
 
             </div>
 
-            {/* STICKY PAYMENT BUTTON */}
+            {/* Sticky payment button */}
             {paymentData && (
               <div className="p-4 border-t border-gray-200 dark:border-gray-700">
                 <button
