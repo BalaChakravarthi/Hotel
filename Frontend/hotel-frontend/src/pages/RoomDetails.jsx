@@ -86,7 +86,7 @@ function RoomDetails() {
               room.image
                 ? room.image.startsWith("http")
                   ? room.image
-                  : `http://127.0.0.1:8000${room.image}`
+                  : `https://hotel-bat5.onrender.com${room.image}`
                 : "https://via.placeholder.com/600x400"
             }
             alt={room.room_type}

@@ -136,7 +136,7 @@ function Navbar() {
                     src={
                       profileImage.startsWith("http")
                         ? profileImage
-                        : `http://127.0.0.1:8000${profileImage}`
+                        : `https://hotel-bat5.onrender.com${profileImage}`
                     }
                     alt="Profile"
                     className="w-full h-full object-cover"
@@ -204,7 +204,7 @@ function Navbar() {
                       src={
                         profileImage.startsWith("http")
                           ? profileImage
-                          : `http://127.0.0.1:8000${profileImage}`
+                          : `https://hotel-bat5.onrender.com${profileImage}`
                       }
                       alt="Profile"
                       className="w-full h-full object-cover"
