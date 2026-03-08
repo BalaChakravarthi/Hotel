@@ -8,6 +8,7 @@ function Navbar() {
 
   const [showMenu, setShowMenu] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
@@ -19,6 +20,9 @@ function Navbar() {
   const token = localStorage.getItem("access");
   const role = localStorage.getItem("role");
   const username = localStorage.getItem("username");
+
+  const isAuthPage =
+    location.pathname === "/" || location.pathname === "/register";
 
   /* DARK MODE */
   useEffect(() => {
@@ -54,6 +58,7 @@ function Navbar() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () =>
       document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -76,14 +81,15 @@ function Navbar() {
     }`;
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50
-                    bg-white/90 dark:bg-gray-900/90
-                    backdrop-blur-md
-                    border-b border-gray-200 dark:border-gray-700
-                    shadow-sm">
-
+    <nav
+      className="fixed top-0 left-0 w-full z-50
+      bg-white/90 dark:bg-gray-900/90
+      backdrop-blur-md
+      border-b border-gray-200 dark:border-gray-700
+      shadow-sm"
+    >
       <div className="max-w-7xl mx-auto flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
-
+        
         {/* LOGO */}
         <h1
           className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
@@ -95,20 +101,36 @@ function Navbar() {
         {/* DESKTOP MENU */}
         <div className="hidden md:flex items-center gap-6">
 
-          {!token ? (
+          {/* AUTH PAGES */}
+          {!token || isAuthPage ? (
             <>
-              <Link to="/" className={linkStyle("/")}>Login</Link>
-              <Link to="/register" className={linkStyle("/register")}>Register</Link>
+              <Link to="/" className={linkStyle("/")}>
+                Login
+              </Link>
+
+              <Link to="/register" className={linkStyle("/register")}>
+                Register
+              </Link>
             </>
           ) : (
             <>
-              <Link to="/home" className={linkStyle("/home")}>Home</Link>
-              <Link to="/bookings" className={linkStyle("/bookings")}>Bookings</Link>
+              <Link to="/home" className={linkStyle("/home")}>
+                Home
+              </Link>
+
+              <Link to="/bookings" className={linkStyle("/bookings")}>
+                Bookings
+              </Link>
 
               {role === "admin" && (
                 <>
-                  <Link to="/admin" className={linkStyle("/admin")}>Admin</Link>
-                  <Link to="/calendar" className={linkStyle("/calendar")}>Calendar</Link>
+                  <Link to="/admin" className={linkStyle("/admin")}>
+                    Admin
+                  </Link>
+
+                  <Link to="/calendar" className={linkStyle("/calendar")}>
+                    Calendar
+                  </Link>
                 </>
               )}
             </>
@@ -118,14 +140,14 @@ function Navbar() {
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="px-3 py-1 border rounded-md
-                       border-gray-300 dark:border-gray-600
-                       hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            border-gray-300 dark:border-gray-600
+            hover:bg-gray-100 dark:hover:bg-gray-800 transition"
           >
             {darkMode ? "☀️" : "🌙"}
           </button>
 
           {/* PROFILE */}
-          {token && (
+          {token && !isAuthPage && (
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setShowMenu(!showMenu)}
@@ -150,6 +172,7 @@ function Navbar() {
 
               {showMenu && (
                 <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-md border border-gray-200 dark:border-gray-700">
+                  
                   <Link
                     to="/profile"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -163,78 +186,54 @@ function Navbar() {
                   >
                     Logout
                   </button>
+
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* MOBILE HAMBURGER */}
+        {/* MOBILE MENU BUTTON */}
         <button
           onClick={() => setMobileMenu(!mobileMenu)}
           className="md:hidden flex flex-col justify-center items-center w-10 h-10
-                     border border-gray-300 dark:border-gray-600
-                     rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          border border-gray-300 dark:border-gray-600
+          rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
         >
           <span className="w-6 h-0.5 bg-gray-700 dark:bg-white mb-1"></span>
           <span className="w-6 h-0.5 bg-gray-700 dark:bg-white mb-1"></span>
           <span className="w-6 h-0.5 bg-gray-700 dark:bg-white"></span>
         </button>
-
       </div>
 
       {/* MOBILE MENU */}
       {mobileMenu && (
         <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-4 space-y-4">
-
-          {!token ? (
+          
+          {!token || isAuthPage ? (
             <>
-              <Link to="/" className={linkStyle("/")}>Login</Link>
-              <Link to="/register" className={linkStyle("/register")}>Register</Link>
+              <Link to="/">Login</Link>
+              <Link to="/register">Register</Link>
             </>
           ) : (
             <>
-              <Link to="/home" className={linkStyle("/home")}>Home</Link>
-              <Link to="/bookings" className={linkStyle("/bookings")}>Bookings</Link>
-
-              <Link to="/profile" className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full overflow-hidden border border-blue-500">
-                  {profileImage ? (
-                    <img
-                      src={
-                        profileImage.startsWith("http")
-                          ? profileImage
-                          : `https://hotel-bat5.onrender.com${profileImage}`
-                      }
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-sm font-bold">
-                      {username?.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                Profile
-              </Link>
+              <Link to="/home">Home</Link>
+              <Link to="/bookings">Bookings</Link>
+              <Link to="/profile">Profile</Link>
             </>
           )}
 
-          {/* DARK MODE */}
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="flex items-center gap-2 px-3 py-2 border rounded-md
-                       border-gray-300 dark:border-gray-600
-                       hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            border-gray-300 dark:border-gray-600
+            hover:bg-gray-100 dark:hover:bg-gray-800 transition"
           >
             {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
           </button>
 
-          {token && (
-            <button
-              onClick={logout}
-              className="block text-red-600"
-            >
+          {token && !isAuthPage && (
+            <button onClick={logout} className="text-red-600">
               Logout
             </button>
           )}
