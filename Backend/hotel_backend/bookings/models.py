@@ -120,9 +120,13 @@ Thank you for choosing LuxStay!
     email = EmailMultiAlternatives(
         subject,
         text_content,
-        settings.EMAIL_HOST_USER,
+        settings.DEFAULT_FROM_EMAIL,
         [instance.user.email],
     )
 
     email.attach_alternative(html_content, "text/html")
-    email.send(fail_silently=False)
+
+    try:
+        email.send(fail_silently=False)
+    except Exception as e:
+        print(f"Email error: {e}")
